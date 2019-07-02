@@ -48,50 +48,31 @@ public class OrderService {
 
     public OrderService(OrderCommand orderCommand) {
         this.orderCommand = orderCommand;
+        user = UserCenter.getUser(orderCommand.getMemberId());
+        oldPoints = user.getPoints();
+        oldMemberType = user.getGrade();
+        initUserDiscountInfo();
     }
 
     public void  order() {
         List<OrderItemCommand> goodsList = orderCommand.getItems();
-        user = UserCenter.getUser(orderCommand.getMemberId());
-        oldPoints = user.getPoints();
-        oldMemberType = user.getGrade();
-        List<String> discountList = orderCommand.getDiscounts();
-        if (discountList != null && discountList.size() > 0) {
-            String discount = discountList.get(0);
-            if ("9折券".equals(discount)) {
-                user.setDiscounts(new DiscountType[]{DiscountType.Dicount_Type1});
-            } else if ("95折券".equals(discount)){
-                user.setDiscounts(new DiscountType[]{DiscountType.Dicount_Type2});
-            }
-        }
-
         for (OrderItemCommand orderItemCommand : goodsList) {
             Goods goods = GoodsCenter.getGoods(orderItemCommand.getProduct());
             long num = orderItemCommand.getAmount().longValue();
-            List<Float> prices = new ArrayList<Float>();
-            for (DiscountType discount : goods.getDiscounts()) {
-                if (discount == DiscountType.Dicount_Type1 || discount == DiscountType.Dicount_Type2 ) {
-                    if (!isUserHasDiscountCoupon(user, discount)) {
-                        discount = DiscountType.Dicount_None;
-                    }
-                }
-
-                IDiscountCalculate calculate = DiscountCalculateFactory.getDiscountCalculate(discount);
-                float price = calculate.calculatePrice(goods.getPrice(), num);
-                prices.add(price);
-            }
-
+            List<Float> prices = calculateGoodsPrices(goods, num);
             float maxPrice = goods.getPrice() * num;
             float minPrice = Collections.min(prices);
             totalAfterDiscountPrice += minPrice;
             totalPrice += maxPrice;
-            float discountPrice = maxPrice - minPrice;
+
             OrderItemRepresentation orderItemRepresentation = new OrderItemRepresentation(goods.getId(),
                     goods.getName(),
                     float2BigDecimal(goods.getPrice()),
                     orderItemCommand.getAmount(),
                     float2BigDecimal(maxPrice));
             orderItemRepresentationList.add(orderItemRepresentation);
+
+            float discountPrice = maxPrice - minPrice;
             if (discountPrice != 0) {
                 DiscountItemRepresentation discountItemRepresentation = new DiscountItemRepresentation(
                         goods.getId(), goods.getName(), float2BigDecimal(discountPrice));
@@ -102,14 +83,46 @@ public class OrderService {
         user.addPoints(Float.valueOf(totalAfterDiscountPrice).longValue());
     }
 
-    public OrderRepresentation getResult() throws ParseException {
+    private List<Float> calculateGoodsPrices(Goods goods, long num) {
+        List<Float> prices = new ArrayList<Float>();
+        // 计算所有优惠方案的价格，选择一个优惠最大的
+        for (DiscountType discount : goods.getDiscounts()) {
+            if (discount == DiscountType.Dicount_Type1 || discount == DiscountType.Dicount_Type2 ) {
+                if (!isUserHasDiscountCoupon(user, discount)) {
+                    discount = DiscountType.Dicount_None;
+                }
+            }
+
+            IDiscountCalculate calculate = DiscountCalculateFactory.getDiscountCalculate(discount);
+            float price = calculate.calculatePrice(goods.getPrice(), num);
+            prices.add(price);
+        }
+        return prices;
+    }
+
+    private void initUserDiscountInfo() {
+        List<String> discountList = orderCommand.getDiscounts();
+        if (discountList != null && discountList.size() > 0) {
+            String discount = discountList.get(0);
+            if ("9折券".equals(discount)) {
+                user.setDiscounts(new DiscountType[]{DiscountType.Dicount_Type1});
+            } else if ("95折券".equals(discount)){
+                user.setDiscounts(new DiscountType[]{DiscountType.Dicount_Type2});
+            }
+        }
+    }
+
+    private List<PaymentRepresentation> getPaymentRepresentation() {
         List<PaymentRepresentation> paymentRepresentationList = new ArrayList<PaymentRepresentation>();
         List<PaymentCommand> paymentCommandList = orderCommand.getPayments();
         for (PaymentCommand paymentCommand : paymentCommandList) {
             PaymentRepresentation paymentRepresentation = new PaymentRepresentation(paymentCommand.getType(), paymentCommand.getAmount());
             paymentRepresentationList.add(paymentRepresentation);
         }
+        return paymentRepresentationList;
+    }
 
+    public OrderRepresentation getResult() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         int increasePoints = user.getPoints() - oldPoints;
         return new OrderRepresentation(orderCommand.getOrderId(),
@@ -125,7 +138,7 @@ public class OrderService {
                 discountItemRepresentationList,
                 float2BigDecimal(totalDiscountPrice),
                 float2BigDecimal(totalAfterDiscountPrice),
-                paymentRepresentationList,
+                getPaymentRepresentation(),
                 orderCommand.getDiscounts()
                 );
     }
