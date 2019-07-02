@@ -6,7 +6,7 @@ package com.coding.sales.discount;
  * @email 18234105447@163.com
  * 每满3000元减350
  **/
-public class DicountCalculateType7 implements  IDiscountCalculate {
+public class DicountCalculateType7 implements IDiscountCalculate {
     /**
      * @param unitPrice
      * @param totalGoods

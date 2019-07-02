@@ -6,7 +6,7 @@ package com.coding.sales.discount;
  * @email 18234105447@163.com
  * 满三送一
  **/
-public class DicountCalculateType4 implements  IDiscountCalculate {
+public class DicountCalculateType4 implements IDiscountCalculate {
     /**
      * @param unitPrice
      * @param totalGoods
