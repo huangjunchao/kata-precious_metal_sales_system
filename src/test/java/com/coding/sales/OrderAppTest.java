@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class OrderAppTest {
+
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() {
         Object[][] data = new Object[][]{

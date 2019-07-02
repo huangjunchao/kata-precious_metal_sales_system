@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 @RunWith(Parameterized.class)
 public class UserTest {
 
-    private long points;
+    private int points;
     private String grade;
 
     @Parameterized.Parameters
@@ -26,14 +26,14 @@ public class UserTest {
         return Arrays.asList(data);
     }
 
-    public UserTest(long points, String grade) {
+    public UserTest(int points, String grade) {
         this.points =  points;
         this.grade = grade;
     }
 
     @Test
     public void getGrade() {
-        User user = new User(points);
+        User user = new User("", "", points);
         assertEquals(grade, user.getGrade());
     }
 }

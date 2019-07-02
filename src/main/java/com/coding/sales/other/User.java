@@ -11,24 +11,44 @@ public class User {
     private String username;
     private String grade;
     private String memberId;
-    private long points;
+    private int points;
+    private Discount[] discounts;
 
-    public User(String username, String memberId, long points) {
+    public Discount[] getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(Discount[] discounts) {
+        this.discounts = discounts;
+    }
+
+    public User(String username, String memberId, int points) {
         this.username = username;
         this.memberId = memberId;
         this.points = points;
     }
 
-    public User (long points){
-        this.points = points;
-    }
-
-    public long getPoints() {
+    public int getPoints() {
         return points;
     }
 
-    public void setPoints(long points) {
+    public void setPoints(int points) {
         this.points = points;
+    }
+
+    public long addPoints(long increasePoints) {
+        if (points < 10000) {
+            return points += increasePoints;
+        }
+
+        if (points >= 10000 && points < 50000) {
+            return points += increasePoints * 1.5;
+        }
+
+        if (points >=50000 && points < 100000) {
+            return points += increasePoints * 1.8;
+        }
+        return points += increasePoints * 2;
     }
 
     public String getUsername() {
