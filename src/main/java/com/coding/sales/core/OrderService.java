@@ -1,11 +1,14 @@
-package com.coding.sales;
+package com.coding.sales.core;
 
+import com.coding.sales.bean.Goods;
+import com.coding.sales.bean.User;
 import com.coding.sales.discount.DiscountCalculateFactory;
+import com.coding.sales.discount.DiscountType;
 import com.coding.sales.discount.IDiscountCalculate;
 import com.coding.sales.input.OrderCommand;
 import com.coding.sales.input.OrderItemCommand;
 import com.coding.sales.input.PaymentCommand;
-import com.coding.sales.other.*;
+import com.coding.sales.core.*;
 import com.coding.sales.output.DiscountItemRepresentation;
 import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.OrderRepresentation;
@@ -16,7 +19,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,9 +59,9 @@ public class OrderService {
         if (discountList != null && discountList.size() > 0) {
             String discount = discountList.get(0);
             if ("9折券".equals(discount)) {
-                user.setDiscounts(new Discount[]{Discount.Dicount_Type1});
+                user.setDiscounts(new DiscountType[]{DiscountType.Dicount_Type1});
             } else if ("95折券".equals(discount)){
-                user.setDiscounts(new Discount[]{Discount.Dicount_Type2});
+                user.setDiscounts(new DiscountType[]{DiscountType.Dicount_Type2});
             }
         }
 
@@ -67,10 +69,10 @@ public class OrderService {
             Goods goods = GoodsCenter.getGoods(orderItemCommand.getProduct());
             long num = orderItemCommand.getAmount().longValue();
             List<Float> prices = new ArrayList<Float>();
-            for (Discount discount : goods.getDiscounts()) {
-                if (discount == Discount.Dicount_Type1 || discount == Discount.Dicount_Type2 ) {
+            for (DiscountType discount : goods.getDiscounts()) {
+                if (discount == DiscountType.Dicount_Type1 || discount == DiscountType.Dicount_Type2 ) {
                     if (!isUserHasDiscountCoupon(user, discount)) {
-                        discount = Discount.Dicount_None;
+                        discount = DiscountType.Dicount_None;
                     }
                 }
 
@@ -128,13 +130,13 @@ public class OrderService {
                 );
     }
 
-    private boolean isUserHasDiscountCoupon(User user, Discount discountType) {
-        Discount[] discounts = user.getDiscounts();
+    private boolean isUserHasDiscountCoupon(User user, DiscountType discountType) {
+        DiscountType[] discounts = user.getDiscounts();
         if (discounts == null || discounts.length == 0) {
             return  false;
         }
 
-        for (Discount discount : discounts) {
+        for (DiscountType discount : discounts) {
             if (discount.equals(discountType)) {
                 return  true;
             }

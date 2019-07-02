@@ -1,6 +1,6 @@
-package com.coding.sales.other;
+package com.coding.sales.discount;
 
-public enum Discount {
+public enum DiscountType {
     // 九折优惠
     Dicount_Type1,
 

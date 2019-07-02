@@ -1,5 +1,6 @@
 package com.coding.sales;
 
+import com.coding.sales.core.OrderService;
 import com.coding.sales.input.OrderCommand;
 import com.coding.sales.output.OrderRepresentation;
 

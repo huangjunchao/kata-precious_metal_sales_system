@@ -1,6 +1,6 @@
-package com.coding.sales.other;
+package com.coding.sales.bean;
 
-import java.util.List;
+import com.coding.sales.discount.DiscountType;
 
 /**
  * @Author huangjunchao
@@ -11,9 +11,9 @@ public class Goods {
     private String id;
     private String name;
     private long price;
-    private Discount[] discounts;
+    private DiscountType[] discounts;
 
-    public Goods(String id, String name, long price, Discount[] discounts) {
+    public Goods(String id, String name, long price, DiscountType[] discounts) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -44,11 +44,11 @@ public class Goods {
         this.price = price;
     }
 
-    public Discount[] getDiscounts() {
+    public DiscountType[] getDiscounts() {
         return discounts;
     }
 
-    public void setDiscounts(Discount[] discounts) {
+    public void setDiscounts(DiscountType[] discounts) {
         this.discounts = discounts;
     }
 }

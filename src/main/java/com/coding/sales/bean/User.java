@@ -1,6 +1,6 @@
-package com.coding.sales.other;
+package com.coding.sales.bean;
 
-import java.math.BigDecimal;
+import com.coding.sales.discount.DiscountType;
 
 /**
  * @Author huangjunchao
@@ -12,13 +12,13 @@ public class User {
     private String grade;
     private String memberId;
     private int points;
-    private Discount[] discounts;
+    private DiscountType[] discounts;
 
-    public Discount[] getDiscounts() {
+    public DiscountType[] getDiscounts() {
         return discounts;
     }
 
-    public void setDiscounts(Discount[] discounts) {
+    public void setDiscounts(DiscountType[] discounts) {
         this.discounts = discounts;
     }
 

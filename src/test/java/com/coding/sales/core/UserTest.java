@@ -1,5 +1,6 @@
-package com.coding.sales.other;
+package com.coding.sales.core;
 
+import com.coding.sales.bean.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

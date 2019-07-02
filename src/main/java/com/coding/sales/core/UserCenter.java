@@ -1,6 +1,7 @@
-package com.coding.sales.other;
+package com.coding.sales.core;
 
-import java.math.BigDecimal;
+import com.coding.sales.bean.User;
+
 import java.util.HashMap;
 import java.util.Map;
 
