@@ -34,16 +34,21 @@ public class OrderService {
 
     private List<DiscountItemRepresentation> discountItemRepresentationList = new ArrayList<DiscountItemRepresentation>();
 
+    // 优惠总金额
     private float totalDiscountPrice;
 
     private User user;
 
+    // 老用户等级
     private String oldMemberType;
 
+    // 老积分
     private int oldPoints;
 
+    // 优惠前总价
     private float totalPrice;
 
+    // 优惠后总价
     private float totalAfterDiscountPrice;
 
     public OrderService(OrderCommand orderCommand) {
@@ -54,6 +59,13 @@ public class OrderService {
         initUserDiscountInfo();
     }
 
+    /**
+     * @Author huangjunchao
+     * @Description  用户下单
+     * @Date 2019/7/2 21:09
+     * @Param []
+     * @return void
+     **/
     public void  order() {
         List<OrderItemCommand> goodsList = orderCommand.getItems();
         for (OrderItemCommand orderItemCommand : goodsList) {
