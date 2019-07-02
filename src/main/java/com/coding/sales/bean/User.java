@@ -27,6 +27,9 @@ public class User {
         this.memberId = memberId;
         this.points = points;
     }
+    public User(int points) {
+        this.points = points;
+    }
 
     public int getPoints() {
         return points;
