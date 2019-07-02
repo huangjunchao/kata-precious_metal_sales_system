@@ -10,8 +10,15 @@ import java.util.List;
 public class Goods {
     private String id;
     private String name;
-    private String price;
-    private List<Discount> discounts;
+    private long price;
+    private Discount[] discounts;
+
+    public Goods(String id, String name, long price, Discount[] discounts) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.discounts = discounts;
+    }
 
     public String getId() {
         return id;
@@ -29,19 +36,19 @@ public class Goods {
         this.name = name;
     }
 
-    public String getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
-    public List<Discount> getDiscounts() {
+    public Discount[] getDiscounts() {
         return discounts;
     }
 
-    public void setDiscounts(List<Discount> discounts) {
+    public void setDiscounts(Discount[] discounts) {
         this.discounts = discounts;
     }
 }
