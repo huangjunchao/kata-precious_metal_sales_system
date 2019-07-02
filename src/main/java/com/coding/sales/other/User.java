@@ -11,18 +11,23 @@ public class User {
     private String username;
     private String grade;
     private String memberId;
-    private BigDecimal points;
-    public User(String username, String grade, String memberId, BigDecimal points) {
+    private long points;
+
+    public User(String username, String memberId, long points) {
         this.username = username;
-        this.grade = grade;
         this.memberId = memberId;
         this.points = points;
     }
-    public BigDecimal getPoints() {
+
+    public User (long points){
+        this.points = points;
+    }
+
+    public long getPoints() {
         return points;
     }
 
-    public void setPoints(BigDecimal points) {
+    public void setPoints(long points) {
         this.points = points;
     }
 
@@ -35,7 +40,19 @@ public class User {
     }
 
     public String getGrade() {
-        return grade;
+        if (points < 10000) {
+            return "普卡";
+        }
+
+        if (points >= 10000 && points < 50000) {
+            return "金卡";
+        }
+
+        if (points >=50000 && points < 100000) {
+            return "白金卡";
+        }
+
+        return "钻石卡";
     }
 
     public void setGrade(String grade) {
